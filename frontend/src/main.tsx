@@ -1,0 +1,1 @@
+/** PayGuard dashboard entrypoint placeholder. */

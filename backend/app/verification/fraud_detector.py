@@ -1,0 +1,1 @@
+"""Fraud scenario detector placeholder."""
