@@ -96,7 +96,7 @@ def assess_quality(image_bytes: bytes) -> QualityMetrics:
         edge_energy = float(edge_stat.mean[0])
 
     too_dark = brightness < 45.0
-    blurry = edge_energy < 12.0 and contrast < 25.0
+    blurry = edge_energy < 12.0 and contrast < 10.0
     return QualityMetrics(
         brightness=round(brightness, 2),
         contrast=round(contrast, 2),

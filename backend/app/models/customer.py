@@ -1,6 +1,7 @@
 """Customer model for buyers placing WhatsApp orders."""
 
 from datetime import datetime
+from typing import Optional
 
 from sqlalchemy import DateTime, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship

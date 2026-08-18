@@ -1,6 +1,7 @@
 """Order model for expected payment context."""
 
 from datetime import datetime
+from typing import Optional
 from decimal import Decimal
 
 from sqlalchemy import DateTime, ForeignKey, Numeric, String
