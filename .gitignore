@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+payguard.db
+backend/payguard.db
+.venv/
+.venv312/
+.DS_Store
+*.swp
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
