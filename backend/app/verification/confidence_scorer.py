@@ -1,1 +1,0 @@
-"""Confidence scoring component placeholder."""

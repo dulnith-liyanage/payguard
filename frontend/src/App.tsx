@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { ShieldCheck, ShieldAlert, Clock, ChevronRight, ArrowLeft, Upload, X } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
