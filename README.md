@@ -3,6 +3,10 @@
 > **BuildStart Software Engineering Intern — 2-Day Engineering Challenge**  
 > A reliable, ultra-low-cost, multi-tiered verification system designed to determine whether a customer's bank transfer payment slip submitted via WhatsApp can be safely accepted using available business evidence.
 
+### 🌐 Deployment Links
+- **Live Frontend Dashboard (GitHub Pages)**: [https://dulnith-liyanage.github.io/payguard/](https://dulnith-liyanage.github.io/payguard/)
+- **Backend Verification Engine**: Runs locally via FastAPI at `http://localhost:8000` (handling local Tesseract OCR, SQLite database, and multi-tier fraud checks).
+
 ---
 
 ## 1. Executive Summary & Objective
@@ -115,65 +119,76 @@ To maintain customer trust without leaking internal security heuristics:
 
 ---
 
-## 6. Local Setup & Running the Application
+## 6. Running the Application & Live Demo
 
-### **Prerequisites**
-- **Python 3.12** (installed via Homebrew or system)
-- **Node.js** (v18+ or v20+) & `npm`
-- **Tesseract OCR** (e.g. `brew install tesseract`)
+The **Frontend** is deployed live on GitHub Pages at **[https://dulnith-liyanage.github.io/payguard/](https://dulnith-liyanage.github.io/payguard/)**.  
+The **Backend** runs locally via FastAPI to execute local Tesseract OCR, SQLite database queries, and multi-tier fraud checks.
 
 ---
 
-### **Step 1: Backend Setup**
+### **Prerequisites**
+- **Python 3.12**
+- **Node.js** (v18+ or v20+) & `npm` (if running frontend locally)
+- **Tesseract OCR** (`brew install tesseract`)
+
+---
+
+### **Step 1: Start the Local Backend Engine**
 
 ```bash
 # 1. Navigate to project root
 cd /Users/dulnithliyanage/Academics/payguard
 
-# 2. Activate Python 3.12 virtual environment
+# 2. Activate Python virtual environment
 source .venv/bin/activate
 
-# 3. (Optional) Install dependencies if needed
-pip install -r requirements.txt
-
-# 4. Seed demo scenarios and database
+# 3. Initialize fresh database (0 submissions)
 cd backend
 python scripts/seed_data.py
 
-# 5. Start the FastAPI server
+# 4. Start the FastAPI API server
 uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
-> Backend runs at **http://localhost:8000** (Interactive Swagger docs: **http://localhost:8000/docs**).
+> The API server will be live at **http://localhost:8000** (Swagger docs at **http://localhost:8000/docs**).
 
 ---
 
-### **Step 2: Frontend Setup**
+### **Step 2: Open the Dashboard**
 
-In a **second terminal tab**:
-
-```bash
-# 1. Navigate to frontend directory
-cd /Users/dulnithliyanage/Academics/payguard/frontend
-
-# 2. Install dependencies (if not already installed)
-npm install
-
-# 3. Start Vite development server
-npm run dev
-```
-> Frontend runs at **http://localhost:5173**.
+You can use either:
+- **Live GitHub Pages URL**: **[https://dulnith-liyanage.github.io/payguard/](https://dulnith-liyanage.github.io/payguard/)**
+- **Local Dev Server**:
+  ```bash
+  cd /Users/dulnithliyanage/Academics/payguard/frontend
+  npm run dev
+  ```
+  *(Opens at http://localhost:5173)*
 
 ---
 
-### **Step 3: Running Tests**
+### **Step 3: Test with the 7 Pre-Generated Demo Receipts**
 
-In project root:
+All sample test receipts are generated in **`backend/images/`** ready to upload via the dashboard:
+
+| # | Demo Image File | Target Order | Expected Result | Reason / Verification Explanation |
+| :-: | :--- | :-: | :--- | :--- |
+| **1** | `1_valid_payment.jpg` | **Order 1** *(Rs. 25,000)* | **`APPROVED (95%)`** | Valid Commercial Bank slip; matches Order 1 and correlates with incoming Bank SMS credit. |
+| **2** | `2_wrong_amount.jpg` | **Order 2** *(Rs. 15,000)* | **`REJECTED (95%)`** | **`AMOUNT_MISMATCH`**: BOC slip shows Rs. 10,000 paid against an expected Rs. 15,000 order. |
+| **3** | `3_wrong_account.jpg` | **Order 1** *(A/C 100200300)* | **`REJECTED (95%)`** | **`ACCOUNT_MISMATCH`**: Paid to account `999888777` instead of business account `100200300`. |
+| **4** | `4_duplicate_slip.jpg` | **Order 1** | **`REJECTED (99%)`** | **`EXACT_DUPLICATE`**: Uploading after Slip #1 triggers instant `SHA-256` duplicate detection. |
+| **5** | `5_reused_cropped_slip.jpg` | **Order 1** | **`REJECTED (95%)`** | **`NEAR_DUPLICATE_IMAGE`**: Altered/cropped screenshot variant detected via 64-bit `pHash` ($\mathcal{H} \le 6$). |
+| **6** | `6_unclear_blurry_slip.jpg` | **Order 4** | **`NEEDS VERIFICATION (10%)`** | **`LOW_QUALITY_BLUR` / `UNREADABLE`**: Degraded image prompts user for a clearer slip. |
+| **7** | `7_missing_bank_sms.jpg` | **Order 4** *(Rs. 5,000)* | **`NEEDS VERIFICATION (40%)`** | **`NO_SMS_MATCH`**: Valid Sampath Bank slip, but bank SMS has not arrived yet (handles carrier delay). |
+
+---
+
+### **Step 4: Running the Automated Test Suite**
 
 ```bash
 source .venv/bin/activate
 pytest -v
 ```
-All **17 unit and integration tests** cover Tier 0 checks, OCR parsing, SMS correlation, Decision Engine logic, and FastAPI REST endpoints.
+All **17 unit and integration tests** verify Tier 0 checks, OCR parsing, SMS correlation, Decision Engine logic, and FastAPI REST endpoints.
 
 ---
 

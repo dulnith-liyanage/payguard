@@ -85,7 +85,13 @@ async def upload_payment(
         res1 = run_ocr(image_bytes)
         
     res2 = match_sms(db, res1.extracted_amount, res1.extracted_reference)
-    final_res = evaluate(res0, res1, res2)
+    final_res = evaluate(
+        res0,
+        res1,
+        res2,
+        expected_amount=order.expected_amount_lkr,
+        expected_account=order.business_account_no
+    )
     
     # 4. Save to DB
     sub = PaymentSubmission(
