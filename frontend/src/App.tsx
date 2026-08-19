@@ -204,16 +204,21 @@ function UploadModal({ onClose, onSuccess }: { onClose: () => void, onSuccess: (
           {error && <div className="p-3 text-sm text-red-700 bg-red-50 rounded-md border border-red-200">{error}</div>}
           
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Order ID</label>
-            <input 
-              type="number" 
-              required
-              min="1"
+            <label className="block text-sm font-medium text-gray-700 mb-1">Select Order Scenario</label>
+            <select 
               value={orderId} 
               onChange={e => setOrderId(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-sm"
-            />
-            <p className="text-xs text-gray-500 mt-1">Hint: Try Order ID 1, 2, 3, or 4 which exist in the DB.</p>
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-sm bg-white"
+            >
+              <option value="1">Order #1 • John Doe (Expected: Rs. 25,000.00)</option>
+              <option value="2">Order #2 • Jane Smith (Expected: Rs. 15,000.00)</option>
+              <option value="3">Order #3 • Fraudster (Expected: Rs. 25,000.00)</option>
+              <option value="4">Order #4 • John Doe (Expected: Rs. 25,000.00 - Duplicate)</option>
+              <option value="5">Order #5 • John Doe (Expected: Rs. 25,000.00 - Reused)</option>
+              <option value="6">Order #6 • Jane Smith (Expected: Rs. 5,000.00 - Blurry)</option>
+              <option value="7">Order #7 • Jane Smith (Expected: Rs. 5,000.00 - Delayed SMS)</option>
+            </select>
+            <p className="text-xs text-gray-500 mt-1">Select the order scenario corresponding to your test receipt.</p>
           </div>
           
           <div>
