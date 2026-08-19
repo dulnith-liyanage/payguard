@@ -129,7 +129,19 @@ function Dashboard({ onSelect }: { onSelect: (id: number) => void }) {
           </li>
         ))}
         {payments.length === 0 && (
-          <li className="px-6 py-10 text-center text-sm text-gray-500">No submissions found.</li>
+          <li className="px-6 py-16 text-center">
+            <ShieldCheck className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+            <p className="text-base font-semibold text-gray-800">No payment submissions yet</p>
+            <p className="text-sm text-gray-500 max-w-sm mx-auto mt-1 mb-4">
+              Your database is clean. Click below to upload and verify your first real bank transfer slip!
+            </p>
+            <button
+              onClick={() => setShowUpload(true)}
+              className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+            >
+              <Upload className="w-4 h-4 mr-2" /> Upload First Slip
+            </button>
+          </li>
         )}
       </ul>
       </div>
